@@ -2,7 +2,6 @@ import React, { RefObject } from 'react';
 import TodoItem from './TodoItem';
 import { ITodo } from '../models';
 import { useTodo } from '../untils';
-// import { useParams } from 'react-router-dom';
 import { StyledSection } from '../styles/TodoList.styles';
 
 
@@ -41,17 +40,15 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
 
 
 function TodoList() {
-  const { todos, todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo } = useTodo();
-  // const params = useParams().id;
+  const { todos, todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, activeFilter } = useTodo();
 
 
   const filterTodos = () => {
-    return todos
-    // return todos.filter(todo =>
-    //   params === undefined ? todo
-    //     : params === 'active' ? todo.checked === false
-    //       : params === 'completed' ? todo.checked === true
-    //         : {});
+    return todos.filter(todo =>
+      activeFilter === 'all' ? todo
+        : activeFilter === 'active' ? todo.checked === false
+          : activeFilter === 'completed' ? todo.checked === true
+            : {});
   };
 
 

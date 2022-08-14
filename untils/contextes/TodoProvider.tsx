@@ -13,7 +13,11 @@ interface TodoProviderProps {
 export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [todos, setTodos] = React.useState<ITodo[]>([]);
   const [todoForEdit, setTodoForEdit] = React.useState<ITodo['id']>(-1);
+  const [activeFilter, setActiveFilter] = React.useState('all');
 
+  const setFilter = (filter: string) => {
+    setActiveFilter(filter);
+  }
 
   const addTodo = ({ description }: Omit<ITodo, 'id' | 'checked'>) => {
     const newId = todos?.length ? todos[todos.length - 1]?.id + 1 : 0;
@@ -78,6 +82,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       addTodo,
       selectAllTodos,
       clearCompletedTodos,
+      activeFilter,
+      setFilter,
     }),
     [
       todos,
@@ -89,6 +95,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       addTodo,
       selectAllTodos,
       clearCompletedTodos,
+      activeFilter,
+      setFilter,
     ]
   );
 

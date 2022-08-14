@@ -12,6 +12,8 @@ export interface TodoContextProps {
   addTodo: ({ description }: Omit<ITodo, 'id' | 'checked'>) => void;
   selectAllTodos: () => void;
   clearCompletedTodos: () => void;
+  activeFilter: string;
+  setFilter: (test: string) => void;
 };
 
 
@@ -25,4 +27,6 @@ export const TodoContext = React.createContext<TodoContextProps>({
   addTodo: () => { },
   selectAllTodos: () => { },
   clearCompletedTodos: () => { },
+  activeFilter: '',
+  setFilter: () => { },
 });

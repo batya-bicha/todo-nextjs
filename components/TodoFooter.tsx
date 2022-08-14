@@ -1,6 +1,5 @@
-import React from 'react'
+import React from 'react';
 import { useTodo } from '../untils';
-// import { NavLink } from 'react-router-dom';
 import {
   StyledTodoFooter,
   StyledItemsLeft,
@@ -11,7 +10,7 @@ import {
 
 
 function TodoFooter() {
-  const { todos, clearCompletedTodos } = useTodo();
+  const { todos, clearCompletedTodos, activeFilter, setFilter } = useTodo();
 
 
   const counterTodosLeft = () => {
@@ -34,21 +33,20 @@ function TodoFooter() {
     <StyledTodoFooter style={todos.length ? {} : { 'display': 'none' }}>
       <StyledItemsLeft>{counterTodosLeft()}</StyledItemsLeft>
       <StyledItemsFilters>
-        {/* <NavLink
-          to='/'
-        > */}
-        <div>All</div>
-        {/* </NavLink> */}
-        {/* <NavLink
-          to='/active'
-        > */}
-        <div>Active</div>
-        {/* </NavLink> */}
-        {/* <NavLink
-          to='/completed'
-        > */}
-        <div>Completed</div>
-        {/* </NavLink> */}
+        <div
+          onClick={() => setFilter('all')}
+          className={activeFilter === 'all' ? 'filterItem active' : 'filterItem'}>
+          All
+        </div>
+        <div
+          onClick={() => setFilter('active')}
+          className={activeFilter === 'active' ? 'filterItem active' : 'filterItem'}>
+          Active
+        </div>
+        <div onClick={() => setFilter('completed')}
+          className={activeFilter === 'completed' ? 'filterItem active' : 'filterItem'}>
+          Completed
+        </div>
       </StyledItemsFilters>
       <StyledClearCompleted
         onClick={() => clearCompleted()}

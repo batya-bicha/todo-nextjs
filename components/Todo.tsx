@@ -1,7 +1,6 @@
 import TodoFooter from './TodoFooter';
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
-// import { Routes, Route } from "react-router-dom";
 import { TodoProvider, useTodo } from '../untils';
 import { StyledTodo } from '../styles/Todo.styled';
 

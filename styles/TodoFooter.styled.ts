@@ -37,7 +37,7 @@ export const StyledItemsFilters = styled.div`
   justify-content: space-between;
   width: 40%;
 
-  a {
+  .filterItem {
     display: block;
     padding: 3px 7px;
     cursor: pointer;
