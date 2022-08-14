@@ -15,6 +15,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [todoForEdit, setTodoForEdit] = React.useState<ITodo['id']>(-1);
   const [activeFilter, setActiveFilter] = React.useState('all');
 
+
   const setFilter = (filter: string) => {
     setActiveFilter(filter);
   }
@@ -73,7 +74,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
   const value = React.useMemo(
     () => ({
-      todos,
+      // todos,
       todoForEdit,
       editTodo,
       checkTodo,
@@ -86,7 +87,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       setFilter,
     }),
     [
-      todos,
+      // todos,
       todoForEdit,
       editTodo,
       checkTodo,

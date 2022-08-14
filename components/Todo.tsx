@@ -1,24 +1,23 @@
 import TodoFooter from './TodoFooter';
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
-import { TodoProvider, useTodo } from '../untils';
+import { TodoProvider } from '../untils';
 import { StyledTodo } from '../styles/Todo.styled';
+import { ITodo } from '../models';
 
 
+interface TodoProps {
+  todos: ITodo[];
+};
 
-function Todo() {
+
+function Todo({ todos }: TodoProps) {
   return (
     <TodoProvider>
       <StyledTodo>
-        <TodoInput />
-        <TodoList />
-        {/* <Routes>
-          <Route >
-            <Route path='/' element={<TodoList />} />
-            <Route path='/:id' element={<TodoList />} />
-          </Route>
-        </Routes> */}
-        <TodoFooter />
+        <TodoInput todos={todos} />
+        <TodoList todos={todos} />
+        <TodoFooter todos={todos} />
       </StyledTodo>
     </TodoProvider>
   )
