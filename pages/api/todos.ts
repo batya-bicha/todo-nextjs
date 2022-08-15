@@ -4,24 +4,43 @@ import { ITodo } from '../../models';
 import { todos } from './data/todos';
 
 
+
 type Data = {
   todos: ITodo[];
-}
+};
+
+
+
+
+
 
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  if (req.method === 'GET') {
-    res.status(200).json({ todos })
-  }
+  const { method, body } = req;
 
-  if (req.method === 'POST') {
-    const newTodo = req.body;
-    // res.status(200).json(res)
-    // res.status(200).json({todos})
-    // res.status(200).send
-    todos.push(newTodo);
+  switch (method) {
+    case "GET":
+      res.status(200).json({ todos });
+      break;
+    case "POST":
+      todos.push(body);
+      break;
+    case "PATCH":
+      todos.splice(0, todos.length);
+      todos.push(...body);
+      break;
+    case "PUT":
+      // res.status(200).json({ message: "PUT" });
+      break;
+    case "DELETE":
+      // res.status(200).json({ message: "DELETE" });
+      break;
+    default:
+    // res.status(404).json({ message: "Not found" });
   }
 }
+
+

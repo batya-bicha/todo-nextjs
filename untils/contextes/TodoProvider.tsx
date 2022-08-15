@@ -1,6 +1,7 @@
 import React from "react";
 import { TodoContext, TodoContextProps } from "./TodoContext";
 import { ITodo } from "../../models";
+import axios from 'axios';
 
 
 
@@ -16,23 +17,18 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [activeFilter, setActiveFilter] = React.useState('all');
 
 
+
+  React.useEffect(() => {
+    axios.get('https://62fa4c36ffd7197707e9727e.mockapi.io/todos')
+      .then(res => setTodos(res.data));
+    console.log('PROVIDER')
+  }, []);
+
+
+
   const setFilter = (filter: string) => {
     setActiveFilter(filter);
   }
-
-  const addTodo = ({ description }: Omit<ITodo, 'id' | 'checked'>) => {
-    const newId = todos?.length ? todos[todos.length - 1]?.id + 1 : 0;
-    setTodos([...todos, { id: newId, description, checked: false }]);
-  };
-
-
-  const checkTodo = (id: ITodo['id']) => {
-    const checkedTodo = todos.map(todo => {
-      return todo.id === id ? { ...todo, checked: !todo.checked } : todo;
-    });
-
-    setTodos(checkedTodo);
-  };
 
 
   const changeTodo = (id: ITodo['id']) => {
@@ -40,41 +36,68 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   };
 
 
-  const deleteTodo = (id: ITodo['id']) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const addTodo = ({ description }: Omit<ITodo, 'id' | 'checked'>) => {
+    const newId = todos?.length ? todos[todos.length - 1]?.id + 1 : 0;
+    axios.post('https://62fa4c36ffd7197707e9727e.mockapi.io/todos', { description, checked: false, id: newId })
+      .then(res => setTodos([...todos, res.data]));
   };
 
-
-  const editTodo = (id: ITodo['id'], description: ITodo['description'], checked: ITodo['checked'], state: boolean) => {
-    const modifiedTodo = todos.map(todo => (
-      todo.id === id ? { id, description, checked } : todo
-    ));
-
-    return state ? null : setTodos(modifiedTodo.filter(todo => (todo.description.trim().length !== 0)));
-  };
-
-
+  //? mockAPI problems 
   const selectAllTodos = () => {
     const checkTodos = todos.every(todo => todo.checked === true);
-    const checkedTodos = todos.map(todo => (
-      {
-        id: todo.id,
+    todos.map(todo => {
+      const newTodo = {
         description: todo.description,
         checked: checkTodos ? false : true,
+        id: todo.id,
       }
-    ));
-    setTodos(checkedTodos);
+      axios.put(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${todo.id}`, newTodo)
+        .then(res => setTodos([res.data]))
+    });
   };
 
 
   const clearCompletedTodos = () => {
-    setTodos(todos.filter(todo => todo.checked !== true));
+    todos.map(todo => (
+      todo.checked === true
+        ? axios.delete(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${todo.id}`)
+        : null
+    ))
   };
+
+
+  const checkTodo = (id: ITodo['id']) => {
+    todos.map(todo => (
+      todo.id === id
+        ? axios.put(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${todo.id}`, { description: todo.description, checked: !todo.checked, id: todo.id })
+        : null
+    ));
+  };
+
+
+  const deleteTodo = (id: ITodo['id']) => {
+    todos.filter(todo => (
+      todo.id == id
+        ? axios.delete(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${todo.id}`)
+        : null
+    ));
+  }
+
+  //? mockAPI problems 
+  const editTodo = (id: ITodo['id'], description: ITodo['description'], checked: ITodo['checked']) => {
+    const modifiedTodo = todos.map(todo => (
+      todo.id === id ? { id, description, checked } : todo
+    ));
+    return description.trim().length !== 0
+      ? axios.put(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${id}`, { description: description, checked: checked, id: id })
+      : axios.delete(`https://62fa4c36ffd7197707e9727e.mockapi.io/todos/${id}`)
+  };
+
 
 
   const value = React.useMemo(
     () => ({
-      // todos,
+      todos,
       todoForEdit,
       editTodo,
       checkTodo,
@@ -87,7 +110,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       setFilter,
     }),
     [
-      // todos,
+      todos,
       todoForEdit,
       editTodo,
       checkTodo,

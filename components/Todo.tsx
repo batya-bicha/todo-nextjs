@@ -1,23 +1,21 @@
+import React from 'react';
 import TodoFooter from './TodoFooter';
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
 import { TodoProvider } from '../untils';
 import { StyledTodo } from '../styles/Todo.styled';
 import { ITodo } from '../models';
+import axios from 'axios';
 
 
-interface TodoProps {
-  todos: ITodo[];
-};
 
-
-function Todo({ todos }: TodoProps) {
+function Todo() {
   return (
     <TodoProvider>
       <StyledTodo>
-        <TodoInput todos={todos} />
-        <TodoList todos={todos} />
-        <TodoFooter todos={todos} />
+        <TodoInput />
+        <TodoList />
+        <TodoFooter />
       </StyledTodo>
     </TodoProvider>
   )

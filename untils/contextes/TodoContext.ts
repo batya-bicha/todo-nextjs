@@ -3,7 +3,7 @@ import { ITodo } from "../../models";
 
 
 export interface TodoContextProps {
-  // todos: ITodo[];
+  todos: ITodo[];
   todoForEdit: ITodo['id'];
   editTodo: (id: ITodo['id'], description: ITodo['description'], checked: ITodo['checked'], state: boolean) => void;
   checkTodo: (id: ITodo['id']) => void;
@@ -18,7 +18,7 @@ export interface TodoContextProps {
 
 
 export const TodoContext = React.createContext<TodoContextProps>({
-  // todos: [],
+  todos: [],
   todoForEdit: 0,
   editTodo: () => { },
   checkTodo: () => { },

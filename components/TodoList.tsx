@@ -1,5 +1,4 @@
 import React, { RefObject } from 'react';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import TodoItem from './TodoItem';
 import { ITodo } from '../models';
 import { useTodo } from '../untils';
@@ -29,6 +28,7 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
       : null;
   };
 
+
   React.useEffect(() => {
     document.addEventListener('click', handleClick);
     return () => {
@@ -39,14 +39,10 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
 
 
 
-interface TodoListProps {
-  todos: ITodo[];
-};
 
+function TodoList() {
+  const { todos, activeFilter } = useTodo();
 
-
-function TodoList({ todos }: TodoListProps) {
-  const { todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, activeFilter } = useTodo();
 
   const filterTodos = () => {
     return todos.filter(todo =>
@@ -56,10 +52,6 @@ function TodoList({ todos }: TodoListProps) {
             : {});
   };
 
-  React.useEffect(() => {
-    // console.log(props)
-  })
-
 
   return (
     <StyledSection>
@@ -67,12 +59,7 @@ function TodoList({ todos }: TodoListProps) {
         {filterTodos().map(todo => (
           <TodoItem
             key={todo.id}
-            checkTodo={checkTodo}
-            deleteTodo={deleteTodo}
-            changeTodo={changeTodo}
             todo={todo}
-            todoForEdit={todoForEdit}
-            editTodo={editTodo}
             useClickOutside={useClickOutside}
           />
         ))}
