@@ -74,7 +74,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
   const value = React.useMemo(
     () => ({
-      // todos,
+      todos,
       todoForEdit,
       editTodo,
       checkTodo,
@@ -87,7 +87,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       setFilter,
     }),
     [
-      // todos,
+      todos,
       todoForEdit,
       editTodo,
       checkTodo,

@@ -39,14 +39,9 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
 
 
 
-interface TodoListProps {
-  todos: ITodo[];
-};
 
-
-
-function TodoList({ todos }: TodoListProps) {
-  const { todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, activeFilter } = useTodo();
+function TodoList() {
+  const { todos,todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, activeFilter } = useTodo();
 
   const filterTodos = () => {
     return todos.filter(todo =>

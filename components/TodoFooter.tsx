@@ -1,5 +1,4 @@
 import React from 'react';
-import { ITodo } from '../models';
 import { useTodo } from '../untils';
 import {
   StyledTodoFooter,
@@ -10,15 +9,9 @@ import {
 
 
 
-interface TodoFooterProps {
-  todos: ITodo[];
-};
 
-
-
-
-function TodoFooter({ todos }: TodoFooterProps) {
-  const { clearCompletedTodos, activeFilter, setFilter } = useTodo();
+function TodoFooter() {
+  const { todos, clearCompletedTodos, activeFilter, setFilter } = useTodo();
 
 
   const counterTodosLeft = () => {
