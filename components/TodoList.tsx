@@ -1,9 +1,9 @@
 import React, { RefObject } from 'react';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import TodoItem from './TodoItem';
 import { ITodo } from '../models';
 import { useTodo } from '../untils';
 import { StyledSection } from '../styles/TodoList.styles';
+import axios from 'axios';
 
 
 
@@ -39,21 +39,27 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
 
 
 
-
+//* todos 
 function TodoList() {
-  const { todos,todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, activeFilter } = useTodo();
+  const { todos, activeFilter } = useTodo();
+  const [dataTodos, setDataTodos] = React.useState<ITodo[]>([]);
+
+
+
+  React.useEffect(() => {
+    axios('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+  }, []);
+
+
 
   const filterTodos = () => {
-    return todos.filter(todo =>
+    return dataTodos.filter(todo =>
       activeFilter === 'all' ? todo
         : activeFilter === 'active' ? todo.checked === false
           : activeFilter === 'completed' ? todo.checked === true
             : {});
   };
-
-  React.useEffect(() => {
-    // console.log(props)
-  })
 
 
   return (
@@ -62,12 +68,7 @@ function TodoList() {
         {filterTodos().map(todo => (
           <TodoItem
             key={todo.id}
-            checkTodo={checkTodo}
-            deleteTodo={deleteTodo}
-            changeTodo={changeTodo}
             todo={todo}
-            todoForEdit={todoForEdit}
-            editTodo={editTodo}
             useClickOutside={useClickOutside}
           />
         ))}

@@ -7,16 +7,12 @@ import {
   StyledInput,
   StyledDeleteTodo,
 } from '../styles/TodoItem.styled';
+import { useTodo } from '../untils';
 
 
 
 interface TodoItemProps {
   todo: ITodo;
-  checkTodo: (id: ITodo['id']) => void;
-  deleteTodo: (id: ITodo['id']) => void;
-  changeTodo: (id: ITodo['id']) => void;
-  todoForEdit: ITodo['id'];
-  editTodo: (id: ITodo['id'], description: ITodo['description'], checked: ITodo['checked'], state: boolean) => void;
   useClickOutside: <T extends HTMLElement = HTMLElement>(
     ref: RefObject<T>,
     callback: (arg: boolean) => void,
@@ -33,7 +29,8 @@ interface TodoItemProps {
 
 
 
-function TodoItem({ todo, checkTodo, deleteTodo, changeTodo, todoForEdit, editTodo, useClickOutside }: TodoItemProps){
+function TodoItem({ todo, useClickOutside }: TodoItemProps) {
+  const { todoForEdit, checkTodo, deleteTodo, changeTodo, editTodo, deleteDataTodo } = useTodo();
   const [focus, setFocus] = React.useState(false);
   const [toChange, setToChange] = React.useState(todoForEdit === todo.id);
   const [value, setValue] = React.useState(todo.description);
@@ -85,7 +82,7 @@ function TodoItem({ todo, checkTodo, deleteTodo, changeTodo, todoForEdit, editTo
           value={value}
         />
         <StyledDeleteTodo
-          onClick={() => deleteTodo(todo.id)}
+          onClick={() => deleteDataTodo(todo.id)}
           style={focus ? {} : { 'display': 'none' }}
         >
         </StyledDeleteTodo>

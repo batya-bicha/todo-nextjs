@@ -6,22 +6,33 @@ import {
   StyledItemsFilters,
   StyledClearCompleted
 } from '../styles/TodoFooter.styled';
+import axios from 'axios';
+import { ITodo } from '../models';
 
 
 
-
+//* todos 
 function TodoFooter() {
   const { todos, clearCompletedTodos, activeFilter, setFilter } = useTodo();
+  const [dataTodos, setDataTodos] = React.useState<ITodo[]>([]);
+
+
+
+  React.useEffect(() => {
+    axios('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+  }, []);
+
 
 
   const counterTodosLeft = () => {
-    const counter = todos.filter(todo => todo.checked === false).length;
+    const counter = dataTodos.filter(todo => todo.checked === false).length;
     return counter > 1 ? counter + ' items left' : counter + ' item left';
   };
 
 
   const checkTodosState = () => {
-    return todos.find(todo => todo.checked === true);
+    return dataTodos.find(todo => todo.checked === true);
   };
 
 
@@ -31,7 +42,7 @@ function TodoFooter() {
 
 
   return (
-    <StyledTodoFooter style={todos.length ? {} : { 'display': 'none' }}>
+    <StyledTodoFooter style={dataTodos.length ? {} : { 'display': 'none' }}>
       <StyledItemsLeft>{counterTodosLeft()}</StyledItemsLeft>
       <StyledItemsFilters>
         <div

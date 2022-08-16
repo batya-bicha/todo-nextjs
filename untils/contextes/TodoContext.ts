@@ -3,7 +3,7 @@ import { ITodo } from "../../models";
 
 
 export interface TodoContextProps {
-  // todos: ITodo[];
+  todos: ITodo[];
   todoForEdit: ITodo['id'];
   editTodo: (id: ITodo['id'], description: ITodo['description'], checked: ITodo['checked'], state: boolean) => void;
   checkTodo: (id: ITodo['id']) => void;
@@ -14,11 +14,14 @@ export interface TodoContextProps {
   clearCompletedTodos: () => void;
   activeFilter: string;
   setFilter: (test: string) => void;
+
+  addDataTodo: ({ description }: Omit<ITodo, 'id' | 'checked'>) => void;
+  deleteDataTodo: (id: ITodo['id']) => void;
 };
 
 
 export const TodoContext = React.createContext<TodoContextProps>({
-  // todos: [],
+  todos: [],
   todoForEdit: 0,
   editTodo: () => { },
   checkTodo: () => { },
@@ -29,4 +32,7 @@ export const TodoContext = React.createContext<TodoContextProps>({
   clearCompletedTodos: () => { },
   activeFilter: '',
   setFilter: () => { },
+
+  addDataTodo: () => { },
+  deleteDataTodo: () => { },
 });

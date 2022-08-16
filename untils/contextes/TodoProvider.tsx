@@ -1,6 +1,7 @@
 import React from "react";
 import { TodoContext, TodoContextProps } from "./TodoContext";
 import { ITodo } from "../../models";
+import axios from "axios";
 
 
 
@@ -11,14 +12,48 @@ interface TodoProviderProps {
 
 
 export const TodoProvider = ({ children }: TodoProviderProps) => {
+  const [dataTodos, setDataTodos] = React.useState<ITodo[]>([]);
+
   const [todos, setTodos] = React.useState<ITodo[]>([]);
   const [todoForEdit, setTodoForEdit] = React.useState<ITodo['id']>(-1);
   const [activeFilter, setActiveFilter] = React.useState('all');
 
 
+
+  //* API 
+  React.useEffect(() => {
+    axios('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+  }, []);
+
+
+
+  //* API 
+  const addDataTodo = ({ description }: Omit<ITodo, 'id' | 'checked'>) => {
+    axios.get('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+
+    const newId = dataTodos?.length ? dataTodos[dataTodos?.length - 1]?.id + 1 : 0;
+
+    axios.post('http://localhost:3000/api/todos', { id: newId, description, checked: false })
+      .then(res => setDataTodos([...res.data.todos]));
+  };
+
+
+  const deleteDataTodo = (id: ITodo['id']) => {
+    axios.delete(`http://localhost:3000/api/todos/${id}`)
+      .then(res => res.data.todos);
+
+    axios.get('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+  };
+
+
+
   const setFilter = (filter: string) => {
     setActiveFilter(filter);
-  }
+  };
+
 
   const addTodo = ({ description }: Omit<ITodo, 'id' | 'checked'>) => {
     const newId = todos?.length ? todos[todos.length - 1]?.id + 1 : 0;
@@ -85,6 +120,9 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       clearCompletedTodos,
       activeFilter,
       setFilter,
+
+      addDataTodo,
+      deleteDataTodo,
     }),
     [
       todos,
@@ -98,6 +136,9 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       clearCompletedTodos,
       activeFilter,
       setFilter,
+
+      addDataTodo,
+      deleteDataTodo,
     ]
   );
 

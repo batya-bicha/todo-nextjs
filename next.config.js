@@ -5,4 +5,15 @@ const nextConfig = {
   styledComponents: true,
 }
 
-module.exports = nextConfig
+module.exports = {
+  nextConfig,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/todos',
+        permanent: true,
+      },
+    ]
+  },
+}

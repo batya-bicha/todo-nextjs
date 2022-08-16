@@ -5,21 +5,27 @@ import {
   StyledPickAll,
   StyledInput,
 } from '../styles/TodoInput.styled';
+import axios from 'axios';
+import { ITodo } from '../models';
 
 
 
-
+//* todos addTodo
 function TodoInput() {
   const [todo, setTodo] = React.useState('');
   const [allTodoTrue, setAllTodoTrue] = React.useState(false);
-  const { todos, addTodo, selectAllTodos } = useTodo();
+  const { todos, addTodo, addDataTodo, selectAllTodos } = useTodo();
+  const [dataTodos, setDataTodos] = React.useState<ITodo[]>([]);
 
 
 
   React.useEffect(() => {
-    const checkedTodos = todos.every(todo => todo.checked === true);
+    const checkedTodos = dataTodos.every(todo => todo.checked === true);
     setAllTodoTrue(checkedTodos);
-  }, [todos]);
+
+    axios('http://localhost:3000/api/todos')
+      .then(res => setDataTodos(res.data.todos));
+  }, []);
 
 
 
@@ -31,7 +37,7 @@ function TodoInput() {
 
   const addNewTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
     return e.key === 'Enter' && todo.trim().length !== 0
-      ? (addTodo({ description: todo }), setTodo(''))
+      ? (addDataTodo({ description: todo }), setTodo(''))
       : null;
   };
 
@@ -44,7 +50,7 @@ function TodoInput() {
   return (
     <StyledContainer>
       <StyledPickAll
-        style={todos.length ? {} : { 'visibility': 'hidden' }}
+        style={dataTodos.length ? {} : { 'visibility': 'hidden' }}
         className={allTodoTrue ? 'allTodoTrue' : ''}
         onClick={() => selectTodos()}
       >
